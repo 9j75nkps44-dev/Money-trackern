@@ -10,8 +10,7 @@
   "background_color": "#f5f8f6",
   "theme_color": "#168a5b",
   "prefer_related_applications": false
-}
-"icons": [
+  "icons": [
   {
     "src": "./icon-180.png",
     "sizes": "1024x1024",
@@ -19,3 +18,4 @@
     "purpose": "any"
   }
 ]
+}
