@@ -1,9 +1,13 @@
 {
   "name": "My Money Tracker",
   "short_name": "My Money",
+  "description": "Personal expenses, income and savings tracker",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone"],
+  "orientation": "portrait",
   "background_color": "#f5f8f6",
-  "theme_color": "#15966e",
-  "icons": []
+  "theme_color": "#168a5b",
+  "prefer_related_applications": false
 }
