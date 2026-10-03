@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#15966e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="My Money">
+<link rel="manifest" href="manifest.webmanifest">
+<title>My Money Tracker</title>
+<style>
+:root{--bg:#f5f8f6;--card:#fff;--ink:#17231d;--muted:#74827b;--green:#15966e;--pale:#e8f6ef;--red:#d94d55;--line:#e2e9e5;--shadow:0 8px 30px rgba(20,45,35,.07)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{max-width:1180px;margin:auto;padding:22px 22px 110px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}.brand{font-size:27px;font-weight:800}.subtitle{font-size:13px;color:var(--muted);margin-top:4px}
+.month{border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 13px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}.label{font-size:13px;color:var(--muted)}.num{font-size:26px;font-weight:800;margin-top:7px}.green{color:var(--green)}.red{color:var(--red)}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:16px}.title{font-size:18px;font-weight:800;margin-bottom:14px}
+.actions{display:flex;flex-wrap:wrap;gap:9px}.primary,.secondary,.danger{border-radius:13px;padding:12px 15px;font-weight:700}.primary{background:var(--green);color:white}.secondary{background:var(--pale);color:var(--green)}.danger{background:#fff0f1;color:var(--red)}
+.list{display:flex;flex-direction:column}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}.left{display:flex;align-items:center;gap:11px;min-width:0}.icon{width:42px;height:42px;flex:none;border-radius:13px;background:var(--pale);display:grid;place-items:center}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.small{font-size:12px;color:var(--muted);margin-top:3px}
+.progress{height:9px;border-radius:99px;background:#e8eeeb;overflow:hidden;margin-top:11px}.bar{height:100%;background:var(--green);border-radius:99px}.note{color:var(--muted);font-size:12px;line-height:1.5}
+.page{display:none}.page.active{display:block}.bottom{position:fixed;z-index:20;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:7px;background:#fff;border:1px solid var(--line);border-radius:21px;box-shadow:var(--shadow)}.bottom button{border:0;background:transparent;border-radius:14px;padding:10px 14px;color:var(--muted)}.bottom button.active{background:var(--pale);color:var(--green);font-weight:700}
+.modal{display:none;position:fixed;inset:0;z-index:30;background:rgba(16,25,21,.35);align-items:flex-end;justify-content:center;padding:14px}.modal.show{display:flex}.sheet{width:min(680px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:25px;padding:22px}.sheet h2{margin:0 0 15px}.form{display:grid;gap:12px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:13px;padding:13px;background:#fff}.field textarea{min-height:80px;resize:vertical}.types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.types button{padding:11px;border:1px solid var(--line);background:#fff;border-radius:12px}.types button.active{background:var(--pale);border-color:#a9dfc9;color:var(--green);font-weight:700}.formactions{display:flex;gap:9px}.formactions>*{flex:1}
+.tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{text-align:left;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}.table th{color:var(--muted)}
+.goal{padding:15px 0;border-bottom:1px solid var(--line)}.goal:last-child{border:0}.goalhead{display:flex;justify-content:space-between;gap:10px}
+@media(max-width:800px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.app{padding:16px 14px 110px}}
+@media(max-width:520px){.cards{gap:9px}.card{padding:14px}.num{font-size:21px}.brand{font-size:23px}.bottom button{padding:9px 10px;font-size:12px}}
+@media print{.bottom,.actions,.month{display:none!important}.app{padding:0}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div><div class="brand">My Money Tracker</div><div class="subtitle">Expenses · Income · Savings</div></div><input class="month" id="month" type="month"></header>
+
+<main id="home" class="page active">
+<section class="cards">
+<div class="card"><div class="label">Income</div><div class="num green" id="income">₱0</div></div>
+<div class="card"><div class="label">Expenses</div><div class="num red" id="expenses">₱0</div></div>
+<div class="card"><div class="label">Savings</div><div class="num green" id="savings">₱0</div></div>
+<div class="card"><div class="label">Remaining</div><div class="num" id="remaining">₱0</div></div>
+</section>
+<section class="grid">
+<div class="card"><div class="title">Quick actions</div><div class="actions">
+<button class="primary" onclick="openEntry('expense')">＋ Expense</button>
+<button class="secondary" onclick="openEntry('income')">＋ Income</button>
+<button class="secondary" onclick="openEntry('saving')">＋ Savings</button>
+</div><p class="note">Your data is saved in this browser on this device. Use the monthly export for backup.</p></div>
+<div class="card"><div class="title">Savings goals</div><div id="homeGoals"></div></div>
+</section>
+<section class="card" style="margin-top:16px"><div class="title">Recent transactions</div><div id="recent" class="list"></div></section>
+</main>
+
+<main id="transactions" class="page">
+<section class="card"><div class="title">Transactions</div><div class="actions" style="margin-bottom:14px"><button class="primary" onclick="openEntry('expense')">＋ Expense</button><button class="secondary" onclick="exportCSV()">Export CSV</button><button class="secondary" onclick="window.print()">Print / Save PDF</button></div>
+<div class="tablewrap"><table class="table"><thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Category / Goal</th><th>Amount</th><th></th></tr></thead><tbody id="txTable"></tbody></table></div></section>
+</main>
+
+<main id="savingsPage" class="page">
+<section class="card"><div class="title">Savings goals</div><div class="actions" style="margin-bottom:12px"><button class="primary" onclick="newGoal()">＋ New goal</button><button class="secondary" onclick="openEntry('saving')">＋ Add savings</button></div><div id="goals"></div></section>
+</main>
+
+<main id="reports" class="page">
+<section class="card"><div class="title">Monthly report</div><div id="report"></div><div class="tablewrap" style="margin-top:15px"><table class="table"><thead><tr><th>Category</th><th>Amount</th></tr></thead><tbody id="cats"></tbody></table></div></section>
+</main>
+</div>
+
+<nav class="bottom"><button class="active" data-page="home">Home</button><button data-page="transactions">Transactions</button><button data-page="savingsPage">Savings</button><button data-page="reports">Reports</button></nav>
+
+<div class="modal" id="entryModal"><div class="sheet"><h2 id="entryTitle">Add Expense</h2><div class="form">
+<div class="types"><button id="type-expense" onclick="setType('expense')">Expense</button><button id="type-income" onclick="setType('income')">Income</button><button id="type-saving" onclick="setType('saving')">Savings</button></div>
+<div class="field"><label>Amount (₱)</label><input id="amount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></div>
+<div class="field" id="categoryWrap"><label>Category</label><select id="category"><option>Food</option><option>Transport</option><option>Shopping</option><option>Bills</option><option>Travel</option><option>Health</option><option>Entertainment</option><option>Other</option></select></div>
+<div class="field" id="goalWrap" style="display:none"><label>Savings goal</label><select id="goal"></select></div>
+<div class="field"><label>Date</label><input id="date" type="date"></div>
+<div class="field"><label>Description</label><textarea id="desc" placeholder="e.g. Dinner, salary, monthly savings"></textarea></div>
+<div class="formactions"><button class="secondary" onclick="closeEntry()">Cancel</button><button class="primary" onclick="saveEntry()">Save</button></div>
+</div></div></div>
+
+<script>
+const STORE='my_money_tracker_v2';
+let db=JSON.parse(localStorage.getItem(STORE)||'null')||{transactions:[],goals:[]};
+let currentType='expense';
+const $=id=>document.getElementById(id);
+const peso=n=>new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP',maximumFractionDigits:2}).format(n||0);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const selectedMonth=()=>$('month').value;
+const monthTx=()=>db.transactions.filter(t=>t.date.slice(0,7)===selectedMonth()).sort((a,b)=>b.date.localeCompare(a.date)||b.createdAt-a.createdAt);
+function persist(){localStorage.setItem(STORE,JSON.stringify(db));render()}
+function totals(){return monthTx().reduce((o,t)=>{o[t.type]=(o[t.type]||0)+t.amount;return o},{expense:0,income:0,saving:0})}
+function txRow(t){let icon=t.type==='expense'?'💸':t.type==='income'?'💵':'🏦';return `<div class="row"><div class="left"><div class="icon">${icon}</div><div class="truncate"><b>${esc(t.description||t.category||t.goalName)}</b><div class="small">${esc(t.category||t.goalName||t.type)} · ${esc(t.date)}</div></div></div><b class="${t.type==='expense'?'red':'green'}">${t.type==='expense'?'-':'+'}${peso(t.amount)}</b></div>`}
+function renderGoals(targetId='goals'){let html=db.goals.map(g=>{let saved=db.transactions.filter(t=>t.type==='saving'&&t.goalId===g.id).reduce((s,t)=>s+t.amount,0),p=g.target?Math.min(100,saved/g.target*100):0;return `<div class="goal"><div class="goalhead"><b>${esc(g.name)}</b><span>${peso(saved)} / ${peso(g.target)}</span></div><div class="progress"><div class="bar" style="width:${p}%"></div></div><div class="small">${p.toFixed(0)}% saved</div></div>`}).join('')||'<div class="note">No savings goals yet.</div>';$(targetId).innerHTML=html}
+function render(){let t=totals();$('income').textContent=peso(t.income);$('expenses').textContent=peso(t.expense);$('savings').textContent=peso(t.saving);$('remaining').textContent=peso(t.income-t.expense-t.saving);let arr=monthTx();$('recent').innerHTML=arr.slice(0,7).map(txRow).join('')||'<div class="note">No transactions for this month.</div>';$('txTable').innerHTML=arr.map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.type)}</td><td>${esc(t.description||'-')}</td><td>${esc(t.category||t.goalName||'-')}</td><td>${peso(t.amount)}</td><td><button class="danger" onclick="removeTx('${t.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="6">No transactions.</td></tr>';let cats={};arr.filter(t=>t.type==='expense').forEach(t=>cats[t.category]=(cats[t.category]||0)+t.amount);$('cats').innerHTML=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${peso(v)}</td></tr>`).join('')||'<tr><td colspan="2">No expenses.</td></tr>';$('report').innerHTML=`<p><b>${esc(selectedMonth())}</b></p><p>Income <b class="green">${peso(t.income)}</b> · Expenses <b class="red">${peso(t.expense)}</b> · Savings <b class="green">${peso(t.saving)}</b> · Remaining <b>${peso(t.income-t.expense-t.saving)}</b></p>`;renderGoals('goals');renderGoals('homeGoals')}
+function setType(type){currentType=type;$('entryTitle').textContent=type==='expense'?'Add Expense':type==='income'?'Add Income':'Add Savings';['expense','income','saving'].forEach(x=>$('type-'+x).classList.toggle('active',x===type));$('categoryWrap').style.display=type==='expense'?'block':'none';$('goalWrap').style.display=type==='saving'?'block':'none';$('goal').innerHTML=db.goals.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join('')||'<option value="">No goals</option>'}
+function openEntry(type){setType(type);$('entryModal').classList.add('show');$('date').value=new Date().toISOString().slice(0,10);$('amount').value='';$('desc').value=''}
+function closeEntry(){$('entryModal').classList.remove('show')}
+function saveEntry(){let amount=Number($('amount').value);if(!(amount>0))return alert('Please enter an amount.');if(currentType==='saving'&&!$('goal').value)return alert('Create a savings goal first.');let g=db.goals.find(x=>x.id===$('goal').value);db.transactions.push({id:crypto.randomUUID(),type:currentType,amount,date:$('date').value,description:$('desc').value.trim(),category:currentType==='expense' ? $('category').value : '',goalId:g?.id||'',goalName:g?.name||'',createdAt:Date.now()});persist();closeEntry()}
+function newGoal(){let name=prompt('Savings goal name:');if(!name)return;let target=Number(prompt('Target amount (₱):'));if(!(target>0))return;db.goals.push({id:crypto.randomUUID(),name:name.trim(),target});persist()}
+function removeTx(id){if(confirm('Delete this transaction?')){db.transactions=db.transactions.filter(t=>t.id!==id);persist()}}
+function exportCSV(){let arr=monthTx(),rows=[['Date','Type','Description','Category / Goal','Amount (PHP)'],...arr.map(t=>[t.date,t.type,t.description||'',t.category||t.goalName||'',t.amount])];let csv=rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\\n');let blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`my-money-${selectedMonth()}.csv`;a.click();URL.revokeObjectURL(url)}
+document.querySelectorAll('.bottom button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.bottom button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(b.dataset.page).classList.add('active')});
+$('month').value=new Date().toISOString().slice(0,7);$('month').onchange=render;render();
+</script>
+</body>
+</html>
