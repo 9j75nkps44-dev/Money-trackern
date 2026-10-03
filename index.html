@@ -308,7 +308,9 @@ td.amount{
   border-bottom:1px solid #e5ece8;
   font-size:13px;
 }
-.report-row:last-child{border-bottom:0}
+.report-row:last-child{
+  border-bottom:0;
+}
 .safety{
   background:#fffaf2;
   border:1px solid #f0dfbd;
@@ -370,7 +372,9 @@ td.amount{
   align-items:flex-end;
   justify-content:center;
 }
-.modal.show{display:flex}
+.modal.show{
+  display:flex;
+}
 .modal-card{
   width:min(600px,100%);
   background:#fff;
@@ -454,16 +458,35 @@ input:focus,select:focus{
   font-size:11px;
 }
 @media(min-width:700px){
-  main{padding-left:24px;padding-right:24px}
-  .cards{grid-template-columns:repeat(4,1fr)}
-  .quick-actions{max-width:600px}
+  main{
+    padding-left:24px;
+    padding-right:24px;
+  }
+  .cards{
+    grid-template-columns:repeat(4,1fr);
+  }
+  .quick-actions{
+    max-width:600px;
+  }
 }
 @media(max-width:450px){
-  .header-row{align-items:flex-start}
-  .month-select{max-width:125px}
-  .flow-wrap{gap:18px}
-  .donut{width:145px;height:145px}
-  .donut::after{width:92px;height:92px}
+  .header-row{
+    align-items:flex-start;
+  }
+  .month-select{
+    max-width:145px;
+  }
+  .flow-wrap{
+    gap:18px;
+  }
+  .donut{
+    width:145px;
+    height:145px;
+  }
+  .donut::after{
+    width:92px;
+    height:92px;
+  }
 }
 </style>
 </head>
@@ -471,21 +494,28 @@ input:focus,select:focus{
 <div class="app">
 <header>
   <div class="header-row">
-    <div>
-      <h1>My Money Tracker</h1>
-      <div class="subtitle">Expenses · Income · Savings</div>
-    </div>
-<select id="monthPicker" class="month-select" onchange="render()"></select>
+<div>
+  <h1>My Money Tracker</h1>
+  <div class="subtitle">Expenses · Income · Savings</div>
+</div>
+<!-- FIXED: REAL MONTH + YEAR PICKER -->
+<input
+  id="monthPicker"
+  class="month-select"
+  type="month"
+  onchange="render()"
+  aria-label="Select month and year"
+>
   </div>
 </header>
 <main>
 <!-- HOME -->
 <section id="homePage" class="page active">
   <div class="cards">
-    <div class="card">
-      <div class="card-label">Income</div>
-      <div id="incomeTotal" class="card-value income">₱0.00</div>
-    </div>
+<div class="card">
+  <div class="card-label">Income</div>
+  <div id="incomeTotal" class="card-value income">₱0.00</div>
+</div>
 <div class="card">
   <div class="card-label">Expenses</div>
   <div id="expenseTotal" class="card-value expense">₱0.00</div>
@@ -500,10 +530,10 @@ input:focus,select:focus{
 </div>
   </div>
   <div class="flow-card">
-    <div class="section-title">
-      <h2>Money Flow</h2>
-      <span class="muted" id="flowMonth"></span>
-    </div>
+<div class="section-title">
+  <h2>Money Flow</h2>
+  <span class="muted" id="flowMonth"></span>
+</div>
 <div class="flow-wrap">
   <div id="donutChart" class="donut">
     <div class="donut-center">
@@ -531,59 +561,69 @@ input:focus,select:focus{
 </div>
   </div>
   <div class="section">
-    <div class="section-title">
-      <h2>Quick Actions</h2>
-    </div>
+<div class="section-title">
+  <h2>Quick Actions</h2>
+</div>
 <div class="quick-actions">
-  <button class="primary" onclick="openEntry('expense')">+ Expense</button>
-  <button class="primary" onclick="openEntry('income')">+ Income</button>
-  <button class="primary" onclick="openEntry('saving')">+ Savings</button>
+  <button class="primary" onclick="openEntry('expense')">
+    + Expense
+  </button>
+  <button class="primary" onclick="openEntry('income')">
+    + Income
+  </button>
+  <button class="primary" onclick="openEntry('saving')">
+    + Savings
+  </button>
 </div>
   </div>
   <div class="section">
-    <div class="section-title">
-      <h2>Savings Goals</h2>
-      <button class="secondary" onclick="newGoal()">+ Goal</button>
-    </div>
+<div class="section-title">
+  <h2>Savings Goals</h2>
+  <button class="secondary" onclick="newGoal()">+ Goal</button>
+</div>
 <div id="homeGoals"></div>
   </div>
   <div class="section">
-    <div class="section-title">
-      <h2>Recent Transactions</h2>
-      <button class="secondary" onclick="showPage('transactions')">View All</button>
-    </div>
+<div class="section-title">
+  <h2>Recent Transactions</h2>
+  <button class="secondary" onclick="showPage('transactions')">
+    View All
+  </button>
+</div>
 <div id="recentTransactions"></div>
   </div>
 </section>
 <!-- TRANSACTIONS -->
 <section id="transactionsPage" class="page">
   <div class="section-title">
-    <h2>Transactions</h2>
+<h2>Transactions</h2>
 <button class="secondary" onclick="exportExcel()">
   Export Excel
 </button>
   </div>
   <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Category / Goal</th>
-          <th>Amount</th>
-          <th></th>
-        </tr>
-      </thead>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Category / Goal</th>
+      <th>Amount</th>
+      <th></th>
+    </tr>
+  </thead>
   <tbody id="transactionTable"></tbody>
 </table>
   </div>
   <div class="section">
-    <div class="section-title">
-      <h2>Data Safety</h2>
-    </div>
+<div class="section-title">
+  <h2>Data Safety</h2>
+</div>
 <div class="safety">
-  <div class="safety-title">Reset or Restore</div>
+  <div class="safety-title">
+    Reset or Restore
+  </div>
   <div class="safety-text">
     Before resetting your data, the app will automatically create a backup.
     If you accidentally reset everything, you can restore the last backup.
@@ -592,7 +632,11 @@ input:focus,select:focus{
     <button class="danger" onclick="resetData()">
       Reset All Data
     </button>
-    <button id="restoreBtn" class="secondary" onclick="restoreBackup()">
+    <button
+      id="restoreBtn"
+      class="secondary"
+      onclick="restoreBackup()"
+    >
       Restore Last Backup
     </button>
   </div>
@@ -602,32 +646,34 @@ input:focus,select:focus{
 </div>
   </div>
   <div class="section">
-    <div class="safety-actions">
-      <button class="secondary" onclick="window.print()">
-        Print / Save PDF
-      </button>
-    </div>
+<div class="safety-actions">
+  <button class="secondary" onclick="window.print()">
+    Print / Save PDF
+  </button>
+</div>
   </div>
 </section>
 <!-- SAVINGS -->
 <section id="savingsPage" class="page">
   <div class="section-title">
-    <h2>Savings Goals</h2>
-    <button class="primary" onclick="newGoal()">+ New Goal</button>
+<h2>Savings Goals</h2>
+<button class="primary" onclick="newGoal()">
+  + New Goal
+</button>
   </div>
   <div id="savingsGoals"></div>
 </section>
 <!-- REPORTS -->
 <section id="reportsPage" class="page">
   <div class="section-title">
-    <h2>Monthly Report</h2>
-    <span class="muted" id="reportMonth"></span>
+<h2>Monthly Report</h2>
+<span class="muted" id="reportMonth"></span>
   </div>
   <div class="report-box" id="monthlyReport"></div>
   <div class="section">
-    <div class="section-title">
-      <h2>Expense Categories</h2>
-    </div>
+<div class="section-title">
+  <h2>Expense Categories</h2>
+</div>
 <div class="table-wrap">
   <table>
     <thead>
@@ -662,66 +708,108 @@ input:focus,select:focus{
   <div class="modal-card">
 <div class="modal-head">
   <h2 id="modalTitle">Add Transaction</h2>
-  <button class="close" onclick="closeEntry()">×</button>
+  <button class="close" onclick="closeEntry()">
+    ×
+  </button>
 </div>
 <div class="type-tabs">
-  <button id="typeExpense" class="type-tab" onclick="setType('expense')">
+  <button
+    id="typeExpense"
+    class="type-tab"
+    onclick="setType('expense')"
+  >
     Expense
   </button>
-  <button id="typeIncome" class="type-tab" onclick="setType('income')">
+  <button
+    id="typeIncome"
+    class="type-tab"
+    onclick="setType('income')"
+  >
     Income
   </button>
-  <button id="typeSaving" class="type-tab" onclick="setType('saving')">
+  <button
+    id="typeSaving"
+    class="type-tab"
+    onclick="setType('saving')"
+  >
     Savings
   </button>
 </div>
 <div class="form-group">
   <label>Amount</label>
-  <input id="amountInput" type="number" min="0" step="0.01" placeholder="0.00">
+  <input
+    id="amountInput"
+    type="number"
+    min="0"
+    step="0.01"
+    placeholder="0.00"
+  >
 </div>
 <div class="form-group">
   <label id="categoryLabel">Category</label>
-  <input id="categoryInput" type="text" placeholder="e.g. Food">
+  <input
+    id="categoryInput"
+    type="text"
+    placeholder="e.g. Food"
+  >
 </div>
 <div class="form-group">
   <label>Date</label>
-  <input id="dateInput" type="date">
+  <input
+    id="dateInput"
+    type="date"
+  >
 </div>
 <div class="form-group">
   <label>Description</label>
-  <input id="descriptionInput" type="text" placeholder="Optional">
+  <input
+    id="descriptionInput"
+    type="text"
+    placeholder="Optional"
+  >
 </div>
 <div class="form-actions">
-  <button class="secondary" onclick="closeEntry()">Cancel</button>
-  <button class="primary" onclick="saveEntry()">Save</button>
+  <button class="secondary" onclick="closeEntry()">
+    Cancel
+  </button>
+  <button class="primary" onclick="saveEntry()">
+    Save
+  </button>
 </div>
   </div>
 </div>
 <script>
-const STORE = 'my_money_tracker_v2';
-const BACKUP_STORE = 'my_money_tracker_backup_v1';
-let db = JSON.parse(
-  localStorage.getItem(STORE) || '{"transactions":[],"goals":[]}'
+const STORE='my_money_tracker_v2';
+const BACKUP_STORE='my_money_tracker_backup_v1';
+let db=JSON.parse(
+  localStorage.getItem(STORE) ||
+  '{"transactions":[],"goals":[]}'
 );
 if(!db.transactions) db.transactions=[];
 if(!db.goals) db.goals=[];
-let currentType = 'expense';
-/* -------------------------
+let currentType='expense';
+/* =========================
    HELPERS
-------------------------- */
+========================= */
 function money(value){
-  return new Intl.NumberFormat('en-PH',{
-    style:'currency',
-    currency:'PHP',
-    minimumFractionDigits:2
-  }).format(Number(value)||0);
+  return new Intl.NumberFormat(
+    'en-PH',
+    {
+      style:'currency',
+      currency:'PHP',
+      minimumFractionDigits:2
+    }
+  ).format(Number(value)||0);
 }
 function shortMoney(value){
-  return new Intl.NumberFormat('en-PH',{
-    style:'currency',
-    currency:'PHP',
-    maximumFractionDigits:0
-  }).format(Number(value)||0);
+  return new Intl.NumberFormat(
+    'en-PH',
+    {
+      style:'currency',
+      currency:'PHP',
+      maximumFractionDigits:0
+    }
+  ).format(Number(value)||0);
 }
 function escapeHtml(value){
   return String(value ?? '')
@@ -732,24 +820,50 @@ function escapeHtml(value){
     .replace(/'/g,'&#039;');
 }
 function today(){
-  return new Date().toISOString().slice(0,10);
+  const now=new Date();
+  const y=now.getFullYear();
+  const m=String(now.getMonth()+1).padStart(2,'0');
+  const d=String(now.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+function currentMonth(){
+  const now=new Date();
+  const y=now.getFullYear();
+  const m=String(now.getMonth()+1).padStart(2,'0');
+  return `${y}-${m}`;
 }
 function selectedMonth(){
-  return document.getElementById('monthPicker').value;
+  const value=
+    document.getElementById('monthPicker').value;
+  return value || currentMonth();
 }
 function monthName(month){
   if(!month) return '';
-  const date = new Date(month+'-01T00:00:00');
-  return date.toLocaleDateString('en-US',{
-    month:'long',
-    year:'numeric'
-  });
+  const parts=month.split('-');
+  if(parts.length!==2) return month;
+  const year=Number(parts[0]);
+  const monthNumber=Number(parts[1]);
+  const date=new Date(
+    year,
+    monthNumber-1,
+    1
+  );
+  return date.toLocaleDateString(
+    'en-US',
+    {
+      month:'long',
+      year:'numeric'
+    }
+  );
 }
-/* -------------------------
+/* =========================
    STORAGE
-------------------------- */
+========================= */
 function persist(){
-  localStorage.setItem(STORE,JSON.stringify(db));
+  localStorage.setItem(
+    STORE,
+    JSON.stringify(db)
+  );
   render();
 }
 function saveBackup(){
@@ -764,7 +878,8 @@ function saveBackup(){
 }
 function getBackup(){
   try{
-    const raw=localStorage.getItem(BACKUP_STORE);
+    const raw=
+      localStorage.getItem(BACKUP_STORE);
     if(!raw) return null;
     return JSON.parse(raw);
   }catch(e){
@@ -782,12 +897,15 @@ function formatBackupDate(timestamp){
   );
 }
 function renderBackupStatus(){
-  const status=document.getElementById('backupStatus');
-  const button=document.getElementById('restoreBtn');
+  const status=
+    document.getElementById('backupStatus');
+  const button=
+    document.getElementById('restoreBtn');
   if(!status || !button) return;
   const backup=getBackup();
   if(!backup){
-    status.textContent='No backup available.';
+    status.textContent=
+      'No backup available.';
     button.disabled=true;
     return;
   }
@@ -796,49 +914,30 @@ function renderBackupStatus(){
     'Last backup: '+
     formatBackupDate(backup.savedAt);
 }
-/* -------------------------
-   MONTHS
-------------------------- */
-function setupMonths(){
-  const select=document.getElementById('monthPicker');
-  const months=new Set();
-  const now=new Date();
-  for(let i=0;i<12;i++){
-    const d=new Date(
-      now.getFullYear(),
-      now.getMonth()-i,
-      1
-    );
-    months.add(
-      d.toISOString().slice(0,7)
-    );
+/* =========================
+   DATE PICKER
+========================= */
+function setupMonthPicker(){
+  const picker=
+    document.getElementById('monthPicker');
+  if(!picker) return;
+  /*
+    Keep the user's current selection if it exists.
+    Otherwise use the actual current month/year.
+  */
+  if(!picker.value){
+    picker.value=currentMonth();
   }
-  db.transactions.forEach(tx=>{
-    if(tx.date){
-      months.add(tx.date.slice(0,7));
-    }
-  });
-  const current=select.value || 
-    now.toISOString().slice(0,7);
-  select.innerHTML=
-    Array.from(months)
-      .sort()
-      .reverse()
-      .map(m=>
-        `<option value="${m}">
-          ${monthName(m)}
-        </option>`
-      )
-      .join('');
-  if(months.has(current)){
-    select.value=current;
-  }else{
-    select.value=now.toISOString().slice(0,7);
-  }
+  /*
+    Allow a wide range of years so the picker
+    is not locked to 2025 or a short list.
+  */
+  picker.min='2000-01';
+  picker.max='2100-12';
 }
-/* -------------------------
+/* =========================
    TRANSACTIONS
-------------------------- */
+========================= */
 function monthTx(){
   const month=selectedMonth();
   return db.transactions
@@ -847,8 +946,11 @@ function monthTx(){
       tx.date.slice(0,7)===month
     )
     .sort((a,b)=>
-      String(b.date).localeCompare(String(a.date)) ||
-      (b.id||0)-(a.id||0)
+      String(b.date).localeCompare(
+        String(a.date)
+      ) ||
+      (Number(b.id)||0)-
+      (Number(a.id)||0)
     );
 }
 function totals(){
@@ -858,7 +960,8 @@ function totals(){
     saving:0
   };
   monthTx().forEach(tx=>{
-    const amount=Number(tx.amount)||0;
+    const amount=
+      Number(tx.amount)||0;
     if(tx.type==='income'){
       result.income+=amount;
     }
@@ -871,9 +974,9 @@ function totals(){
   });
   return result;
 }
-/* -------------------------
-   GOALS
-------------------------- */
+/* =========================
+   SAVINGS GOALS
+========================= */
 function goalSaved(goalId){
   return db.transactions
     .filter(tx=>
@@ -881,7 +984,8 @@ function goalSaved(goalId){
       String(tx.goalId)===String(goalId)
     )
     .reduce(
-      (sum,tx)=>sum+(Number(tx.amount)||0),
+      (sum,tx)=>
+        sum+(Number(tx.amount)||0),
       0
     );
 }
@@ -900,48 +1004,66 @@ function renderGoals(){
       `;
       return;
     }
-    container.innerHTML=db.goals.map(goal=>{
-      const target=Number(goal.target)||0;
-      const saved=goalSaved(goal.id);
-      const percent=target>0
-        ? Math.min(100,(saved/target)*100)
-        : 0;
-      return `
-        <div class="goal">
-          <div class="goal-top">
-            <div>
-              <div class="goal-name">
-                ${escapeHtml(goal.name)}
+    container.innerHTML=
+      db.goals.map(goal=>{
+        const target=
+          Number(goal.target)||0;
+        const saved=
+          goalSaved(goal.id);
+        const percent=
+          target>0
+            ? Math.min(
+                100,
+                (saved/target)*100
+              )
+            : 0;
+        return `
+          <div class="goal">
+            <div class="goal-top">
+              <div>
+                <div class="goal-name">
+                  ${escapeHtml(goal.name)}
+                </div>
+                <div class="goal-amount">
+                  ${money(saved)}
+                  of
+                  ${money(target)}
+                </div>
               </div>
-              <div class="goal-amount">
-                ${money(saved)} of ${money(target)}
-              </div>
+              <button
+                class="delete-btn"
+                onclick="removeGoal('${goal.id}')"
+              >
+                Delete
+              </button>
             </div>
-            <button
-              class="delete-btn"
-              onclick="removeGoal('${goal.id}')"
-            >
-              Delete
-            </button>
+            <div class="progress">
+              <div
+                class="progress-bar"
+                style="width:${percent}%"
+              ></div>
+            </div>
+            <div class="goal-bottom">
+              <span>
+                ${percent.toFixed(0)}% complete
+              </span>
+              <span>
+                ${money(
+                  Math.max(
+                    0,
+                    target-saved
+                  )
+                )} left
+              </span>
+            </div>
           </div>
-          <div class="progress">
-            <div
-              class="progress-bar"
-              style="width:${percent}%"
-            ></div>
-          </div>
-          <div class="goal-bottom">
-            <span>${percent.toFixed(0)}% complete</span>
-            <span>${money(Math.max(0,target-saved))} left</span>
-          </div>
-        </div>
-      `;
-    }).join('');
+        `;
+      }).join('');
   });
 }
-/* -------------------------
-   HOME
-------------------------- */
+/* =========================
+   FLOW CHART
+========================= */
 function renderFlowChart(t){
   const income=t.income||0;
   const expense=t.expense||0;
@@ -954,13 +1076,16 @@ function renderFlowChart(t){
     expense+
     saving+
     remaining;
-  const chart=document.getElementById('donutChart');
+  const chart=
+    document.getElementById('donutChart');
   if(total<=0){
     chart.style.background=
       'conic-gradient(#e9eeeb 0 100%)';
   }else{
-    const expenseDeg=(expense/total)*360;
-    const savingDeg=(saving/total)*360;
+    const expenseDeg=
+      (expense/total)*360;
+    const savingDeg=
+      (saving/total)*360;
     chart.style.background=
       `conic-gradient(
         #d95c5c 0deg ${expenseDeg}deg,
@@ -968,37 +1093,55 @@ function renderFlowChart(t){
         #54a77d ${expenseDeg+savingDeg}deg 360deg
       )`;
   }
-  document.getElementById('donutTotal').textContent=
-    shortMoney(income);
-  document.getElementById('legendExpense').textContent=
-    shortMoney(expense);
-  document.getElementById('legendSaving').textContent=
-    shortMoney(saving);
-  document.getElementById('legendRemaining').textContent=
-    shortMoney(remaining);
+  document.getElementById(
+    'donutTotal'
+  ).textContent=shortMoney(income);
+  document.getElementById(
+    'legendExpense'
+  ).textContent=shortMoney(expense);
+  document.getElementById(
+    'legendSaving'
+  ).textContent=shortMoney(saving);
+  document.getElementById(
+    'legendRemaining'
+  ).textContent=shortMoney(remaining);
 }
+/* =========================
+   HOME
+========================= */
 function renderHome(){
   const t=totals();
-  const remaining=
-    Math.max(
-      0,
-      t.income-t.expense-t.saving
-    );
-  document.getElementById('incomeTotal').textContent=
-    money(t.income);
-  document.getElementById('expenseTotal').textContent=
-    money(t.expense);
-  document.getElementById('savingTotal').textContent=
-    money(t.saving);
-  document.getElementById('remainingTotal').textContent=
-    money(remaining);
-  document.getElementById('flowMonth').textContent=
-    monthName(selectedMonth());
+  const remaining=Math.max(
+    0,
+    t.income-
+    t.expense-
+    t.saving
+  );
+  document.getElementById(
+    'incomeTotal'
+  ).textContent=money(t.income);
+  document.getElementById(
+    'expenseTotal'
+  ).textContent=money(t.expense);
+  document.getElementById(
+    'savingTotal'
+  ).textContent=money(t.saving);
+  document.getElementById(
+    'remainingTotal'
+  ).textContent=money(remaining);
+  document.getElementById(
+    'flowMonth'
+  ).textContent=monthName(
+    selectedMonth()
+  );
   renderFlowChart(t);
   renderGoals();
-  const recent=monthTx().slice(0,5);
+  const recent=
+    monthTx().slice(0,5);
   const container=
-    document.getElementById('recentTransactions');
+    document.getElementById(
+      'recentTransactions'
+    );
   if(!recent.length){
     container.innerHTML=`
       <div class="tx-list">
@@ -1035,7 +1178,9 @@ function renderHome(){
               <div class="tx-meta">
                 ${escapeHtml(tx.date)}
                 ·
-                ${escapeHtml(tx.category||'')}
+                ${escapeHtml(
+                  tx.category||''
+                )}
               </div>
             </div>
             <div class="tx-right">
@@ -1049,64 +1194,87 @@ function renderHome(){
     </div>
   `;
 }
-/* -------------------------
+/* =========================
    TRANSACTION TABLE
-------------------------- */
+========================= */
 function renderTransactionTable(){
   const tbody=
-    document.getElementById('transactionTable');
+    document.getElementById(
+      'transactionTable'
+    );
   if(!tbody) return;
   const transactions=monthTx();
   if(!transactions.length){
     tbody.innerHTML=`
       <tr>
-        <td colspan="6" class="empty">
+        <td
+          colspan="6"
+          class="empty"
+        >
           No transactions for this month.
         </td>
       </tr>
     `;
     return;
   }
-  tbody.innerHTML=transactions.map(tx=>{
-    const typeLabel=
-      tx.type==='saving'
-        ? 'Saving'
-        : tx.type.charAt(0).toUpperCase()+
-          tx.type.slice(1);
-    return `
-      <tr>
-        <td>${escapeHtml(tx.date)}</td>
-        <td>${escapeHtml(typeLabel)}</td>
-        <td>${escapeHtml(tx.description||'')}</td>
-        <td>${escapeHtml(tx.category||'')}</td>
-        <td class="amount">
-          ${money(tx.amount)}
-        </td>
-        <td>
-          <button
-            class="delete-btn"
-            onclick="removeTx('${tx.id}')"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    `;
-  }).join('');
+  tbody.innerHTML=
+    transactions.map(tx=>{
+      const typeLabel=
+        tx.type==='saving'
+          ? 'Saving'
+          : tx.type.charAt(0).toUpperCase()+
+            tx.type.slice(1);
+      return `
+        <tr>
+          <td>
+            ${escapeHtml(tx.date)}
+          </td>
+          <td>
+            ${escapeHtml(typeLabel)}
+          </td>
+          <td>
+            ${escapeHtml(
+              tx.description||''
+            )}
+          </td>
+          <td>
+            ${escapeHtml(
+              tx.category||''
+            )}
+          </td>
+          <td class="amount">
+            ${money(tx.amount)}
+          </td>
+          <td>
+            <button
+              class="delete-btn"
+              onclick="removeTx('${tx.id}')"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
 }
-/* -------------------------
+/* =========================
    REPORTS
-------------------------- */
+========================= */
 function renderReports(){
   const t=totals();
-  const remaining=
-    Math.max(
-      0,
-      t.income-t.expense-t.saving
-    );
-  document.getElementById('reportMonth').textContent=
+  const remaining=Math.max(
+    0,
+    t.income-
+    t.expense-
+    t.saving
+  );
+  document.getElementById(
+    'reportMonth'
+  ).textContent=
     monthName(selectedMonth());
-  document.getElementById('monthlyReport').innerHTML=`
+  document.getElementById(
+    'monthlyReport'
+  ).innerHTML=`
     <div class="report-row">
       <span>Total Income</span>
       <strong>${money(t.income)}</strong>
@@ -1130,7 +1298,9 @@ function renderReports(){
   `;
   const categories={};
   monthTx()
-    .filter(tx=>tx.type==='expense')
+    .filter(tx=>
+      tx.type==='expense'
+    )
     .forEach(tx=>{
       const category=
         tx.category ||
@@ -1140,14 +1310,19 @@ function renderReports(){
         (Number(tx.amount)||0);
     });
   const categoryTable=
-    document.getElementById('categoryTable');
+    document.getElementById(
+      'categoryTable'
+    );
   const entries=
     Object.entries(categories)
       .sort((a,b)=>b[1]-a[1]);
   if(!entries.length){
     categoryTable.innerHTML=`
       <tr>
-        <td colspan="2" class="empty">
+        <td
+          colspan="2"
+          class="empty"
+        >
           No expenses for this month.
         </td>
       </tr>
@@ -1155,36 +1330,48 @@ function renderReports(){
     return;
   }
   categoryTable.innerHTML=
-    entries.map(([category,amount])=>`
-      <tr>
-        <td>${escapeHtml(category)}</td>
-        <td class="amount">${money(amount)}</td>
-      </tr>
-    `).join('');
+    entries.map(
+      ([category,amount])=>`
+        <tr>
+          <td>
+            ${escapeHtml(category)}
+          </td>
+          <td class="amount">
+            ${money(amount)}
+          </td>
+        </tr>
+      `
+    ).join('');
 }
-/* -------------------------
+/* =========================
    MAIN RENDER
-------------------------- */
+========================= */
 function render(){
-  setupMonths();
+  setupMonthPicker();
   renderHome();
   renderTransactionTable();
   renderGoals();
   renderReports();
   renderBackupStatus();
 }
-/* -------------------------
+/* =========================
    NAVIGATION
-------------------------- */
+========================= */
 function showPage(page){
   document
     .querySelectorAll('.page')
-    .forEach(el=>el.classList.remove('active'));
+    .forEach(el=>
+      el.classList.remove('active')
+    );
   document
     .querySelectorAll('.nav-btn')
-    .forEach(el=>el.classList.remove('active'));
+    .forEach(el=>
+      el.classList.remove('active')
+    );
   document
-    .getElementById(page+'Page')
+    .getElementById(
+      page+'Page'
+    )
     .classList.add('active');
   document
     .getElementById(
@@ -1198,15 +1385,23 @@ function showPage(page){
     behavior:'smooth'
   });
 }
-/* -------------------------
+/* =========================
    ENTRY MODAL
-------------------------- */
+========================= */
 function openEntry(type='expense'){
   currentType=type;
-  document.getElementById('amountInput').value='';
-  document.getElementById('categoryInput').value='';
-  document.getElementById('descriptionInput').value='';
-  document.getElementById('dateInput').value=today();
+  document.getElementById(
+    'amountInput'
+  ).value='';
+  document.getElementById(
+    'categoryInput'
+  ).value='';
+  document.getElementById(
+    'descriptionInput'
+  ).value='';
+  document.getElementById(
+    'dateInput'
+  ).value=today();
   setType(type);
   document
     .getElementById('entryModal')
@@ -1232,19 +1427,26 @@ function setType(type){
     )
     .classList.add('active');
   const label=
-    document.getElementById('categoryLabel');
+    document.getElementById(
+      'categoryLabel'
+    );
   const input=
-    document.getElementById('categoryInput');
+    document.getElementById(
+      'categoryInput'
+    );
   if(type==='saving'){
-    label.textContent='Savings Goal';
+    label.textContent=
+      'Savings Goal';
     input.placeholder=
       'e.g. Ipad, Emergency Fund';
   }else if(type==='income'){
-    label.textContent='Category';
+    label.textContent=
+      'Category';
     input.placeholder=
       'e.g. Salary, Freelance';
   }else{
-    label.textContent='Category';
+    label.textContent=
+      'Category';
     input.placeholder=
       'e.g. Food, Transport';
   }
@@ -1252,24 +1454,41 @@ function setType(type){
 function saveEntry(){
   const amount=
     Number(
-      document.getElementById('amountInput').value
+      document.getElementById(
+        'amountInput'
+      ).value
     );
   const category=
-    document.getElementById('categoryInput').value.trim();
+    document.getElementById(
+      'categoryInput'
+    ).value.trim();
   const date=
-    document.getElementById('dateInput').value;
+    document.getElementById(
+      'dateInput'
+    ).value;
   const description=
-    document.getElementById('descriptionInput').value.trim();
+    document.getElementById(
+      'descriptionInput'
+    ).value.trim();
   if(!amount || amount<=0){
-    alert('Please enter a valid amount.');
+    alert(
+      'Please enter a valid amount.'
+    );
     return;
   }
   if(!date){
-    alert('Please select a date.');
+    alert(
+      'Please select a date.'
+    );
     return;
   }
-  if(currentType==='saving' && !category){
-    alert('Please enter a savings goal.');
+  if(
+    currentType==='saving' &&
+    !category
+  ){
+    alert(
+      'Please enter a savings goal.'
+    );
     return;
   }
   const tx={
@@ -1284,13 +1503,15 @@ function saveEntry(){
   persist();
   closeEntry();
 }
-/* -------------------------
+/* =========================
    DELETE TRANSACTION
-------------------------- */
+========================= */
 function removeTx(id){
-  const tx=db.transactions.find(
-    item=>String(item.id)===String(id)
-  );
+  const tx=
+    db.transactions.find(
+      item=>
+        String(item.id)===String(id)
+    );
   if(!tx) return;
   const confirmed=confirm(
     'Delete this transaction?\n\n'+
@@ -1299,21 +1520,26 @@ function removeTx(id){
   if(!confirmed) return;
   db.transactions=
     db.transactions.filter(
-      item=>String(item.id)!==String(id)
+      item=>
+        String(item.id)!==
+        String(id)
     );
   persist();
 }
-/* -------------------------
+/* =========================
    SAVINGS GOALS
-------------------------- */
+========================= */
 function newGoal(){
   const name=prompt(
     'Savings goal name:\n\nExample: Ipad'
   );
   if(name===null) return;
-  const cleanName=name.trim();
+  const cleanName=
+    name.trim();
   if(!cleanName){
-    alert('Please enter a goal name.');
+    alert(
+      'Please enter a goal name.'
+    );
     return;
   }
   const targetInput=prompt(
@@ -1322,9 +1548,12 @@ function newGoal(){
     '":'
   );
   if(targetInput===null) return;
-  const target=Number(targetInput);
+  const target=
+    Number(targetInput);
   if(!target || target<=0){
-    alert('Please enter a valid target amount.');
+    alert(
+      'Please enter a valid target amount.'
+    );
     return;
   }
   db.goals.push({
@@ -1335,9 +1564,11 @@ function newGoal(){
   persist();
 }
 function removeGoal(id){
-  const goal=db.goals.find(
-    g=>String(g.id)===String(id)
-  );
+  const goal=
+    db.goals.find(
+      g=>
+        String(g.id)===String(id)
+    );
   if(!goal) return;
   const confirmed=confirm(
     `Delete savings goal "${goal.name}"?\n\n`+
@@ -1346,13 +1577,15 @@ function removeGoal(id){
   if(!confirmed) return;
   db.goals=
     db.goals.filter(
-      g=>String(g.id)!==String(id)
+      g=>
+        String(g.id)!==
+        String(id)
     );
   persist();
 }
-/* -------------------------
+/* =========================
    RESET + RESTORE
-------------------------- */
+========================= */
 function resetData(){
   const confirmed=confirm(
     'Are you sure you want to reset ALL your data?\n\n'+
@@ -1373,7 +1606,9 @@ function resetData(){
 function restoreBackup(){
   const backup=getBackup();
   if(!backup){
-    alert('No backup is available.');
+    alert(
+      'No backup is available.'
+    );
     return;
   }
   const confirmed=confirm(
@@ -1384,16 +1619,18 @@ function restoreBackup(){
   db=JSON.parse(
     JSON.stringify(backup.db)
   );
-  if(!db.transactions) db.transactions=[];
-  if(!db.goals) db.goals=[];
+  if(!db.transactions)
+    db.transactions=[];
+  if(!db.goals)
+    db.goals=[];
   persist();
   alert(
     'Backup restored successfully!'
   );
 }
-/* -------------------------
+/* =========================
    EXCEL EXPORT
-------------------------- */
+========================= */
 function exportExcel(){
   if(typeof XLSX==='undefined'){
     alert(
@@ -1402,18 +1639,25 @@ function exportExcel(){
     );
     return;
   }
-  const month=selectedMonth();
-  const transactions=monthTx();
-  const t=totals();
+  const month=
+    selectedMonth();
+  const transactions=
+    monthTx();
+  const t=
+    totals();
   const remaining=
     Math.max(
       0,
-      t.income-t.expense-t.saving
+      t.income-
+      t.expense-
+      t.saving
     );
-  /* SUMMARY SHEET */
   const summaryRows=[
     ['My Money Tracker'],
-    ['Month',monthName(month)],
+    [
+      'Month',
+      monthName(month)
+    ],
     [],
     ['Summary'],
     ['Income',t.income],
@@ -1424,7 +1668,8 @@ function exportExcel(){
     ['Savings Goals']
   ];
   db.goals.forEach(goal=>{
-    const saved=goalSaved(goal.id);
+    const saved=
+      goalSaved(goal.id);
     summaryRows.push([
       goal.name,
       saved,
@@ -1434,7 +1679,6 @@ function exportExcel(){
         : 0
     ]);
   });
-  /* TRANSACTIONS SHEET */
   const transactionRows=[
     [
       'Date',
@@ -1453,7 +1697,6 @@ function exportExcel(){
       Number(tx.amount)||0
     ]);
   });
-  /* GOALS SHEET */
   const goalRows=[
     [
       'Goal',
@@ -1463,23 +1706,33 @@ function exportExcel(){
     ]
   ];
   db.goals.forEach(goal=>{
-    const saved=goalSaved(goal.id);
-    const target=Number(goal.target)||0;
+    const saved=
+      goalSaved(goal.id);
+    const target=
+      Number(goal.target)||0;
     goalRows.push([
       goal.name,
       saved,
       target,
-      target ? saved/target : 0
+      target
+        ? saved/target
+        : 0
     ]);
   });
-  const wb=XLSX.utils.book_new();
+  const wb=
+    XLSX.utils.book_new();
   const wsSummary=
-    XLSX.utils.aoa_to_sheet(summaryRows);
+    XLSX.utils.aoa_to_sheet(
+      summaryRows
+    );
   const wsTransactions=
-    XLSX.utils.aoa_to_sheet(transactionRows);
+    XLSX.utils.aoa_to_sheet(
+      transactionRows
+    );
   const wsGoals=
-    XLSX.utils.aoa_to_sheet(goalRows);
-  /* COLUMN WIDTHS */
+    XLSX.utils.aoa_to_sheet(
+      goalRows
+    );
   wsSummary['!cols']=[
     {wch:24},
     {wch:18},
@@ -1499,30 +1752,66 @@ function exportExcel(){
     {wch:18},
     {wch:15}
   ];
-  /* NUMBER FORMATTING */
-  for(let row=1;row<=wsSummary['!ref']
-    ? XLSX.utils.decode_range(wsSummary['!ref']).e.r+1
-    : 0;row++){
-    ['B','C','D'].forEach(col=>{
-      const cell=wsSummary[col+row];
-      if(cell && typeof cell.v==='number'){
-        cell.z='"₱"#,##0.00';
-      }
-    });
-  }
-  for(let row=2;row<=transactionRows.length;row++){
-    const cell=wsTransactions['E'+row];
-    if(cell){
-      cell.z='"₱"#,##0.00';
+  const summaryRange=
+    wsSummary['!ref']
+      ? XLSX.utils.decode_range(
+          wsSummary['!ref']
+        )
+      : null;
+  if(summaryRange){
+    for(
+      let row=1;
+      row<=summaryRange.e.r+1;
+      row++
+    ){
+      ['B','C','D'].forEach(col=>{
+        const cell=
+          wsSummary[
+            col+row
+          ];
+        if(
+          cell &&
+          typeof cell.v==='number'
+        ){
+          cell.z=
+            '"₱"#,##0.00';
+        }
+      });
     }
   }
-  for(let row=2;row<=goalRows.length;row++){
-    const savedCell=wsGoals['B'+row];
-    const targetCell=wsGoals['C'+row];
-    const progressCell=wsGoals['D'+row];
-    if(savedCell) savedCell.z='"₱"#,##0.00';
-    if(targetCell) targetCell.z='"₱"#,##0.00';
-    if(progressCell) progressCell.z='0%';
+  for(
+    let row=2;
+    row<=transactionRows.length;
+    row++
+  ){
+    const cell=
+      wsTransactions[
+        'E'+row
+      ];
+    if(cell){
+      cell.z=
+        '"₱"#,##0.00';
+    }
+  }
+  for(
+    let row=2;
+    row<=goalRows.length;
+    row++
+  ){
+    const savedCell=
+      wsGoals['B'+row];
+    const targetCell=
+      wsGoals['C'+row];
+    const progressCell=
+      wsGoals['D'+row];
+    if(savedCell)
+      savedCell.z=
+        '"₱"#,##0.00';
+    if(targetCell)
+      targetCell.z=
+        '"₱"#,##0.00';
+    if(progressCell)
+      progressCell.z='0%';
   }
   XLSX.utils.book_append_sheet(
     wb,
@@ -1541,16 +1830,16 @@ function exportExcel(){
   );
   XLSX.writeFile(
     wb,
-    `my-money-${selectedMonth()}.xlsx`
+    `my-money-${month}.xlsx`
   );
 }
-/* -------------------------
+/* =========================
    START APP
-------------------------- */
+========================= */
 document.addEventListener(
   'DOMContentLoaded',
   ()=>{
-    setupMonths();
+    setupMonthPicker();
     render();
   }
 );
