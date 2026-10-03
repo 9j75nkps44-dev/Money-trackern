@@ -1,4 +1,4 @@
-MY MONEY TRACKER — WEB APP V1
+MY MONEY TRACKER — WEB APP V1.0
 
 This is the proper web-app/PWA version for iPad.
 
