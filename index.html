@@ -9,6 +9,8 @@
 <meta name="apple-mobile-web-app-title" content="My Money">
 <link rel="manifest" href="manifest.webmanifest">
 <title>My Money Tracker</title>
+<!-- Excel XLSX library -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
 :root{
   --bg:#f5f8f6;
@@ -538,8 +540,8 @@ button{cursor:pointer}
 <button class="primary" onclick="openEntry('expense')">
   ＋ Expense
 </button>
-<button class="secondary" onclick="exportCSV()">
-  Export CSV
+<button class="secondary" onclick="exportExcel()">
+  Export Excel
 </button>
 <button class="secondary" onclick="window.print()">
   Print / Save PDF
@@ -743,11 +745,6 @@ function renderFlowChart(t){
   const income=t.income||0;
   const expense=t.expense||0;
   const saving=t.saving||0;
-  /*
-    Remaining cannot be negative for the pie chart.
-    If expenses + savings exceed income,
-    the chart will show the actual outflow only.
-  */
   const remaining=Math.max(
     0,
     income-expense-saving
@@ -914,7 +911,6 @@ function render(){
       -
       t.saving
     );
-  /* Update Money Flow chart */
   renderFlowChart(t);
   let arr=monthTx();
   $('recent').innerHTML=
@@ -1161,10 +1157,20 @@ function removeTx(id){
     persist();
   }
 }
-/* EXPORT CSV */
-function exportCSV(){
-  let arr=monthTx();
-  let rows=[
+/* EXPORT EXCEL */
+function exportExcel(){
+  if(typeof XLSX==='undefined'){
+    alert(
+      'Excel export is not available right now. Please check your internet connection and try again.'
+    );
+    return;
+  }
+  const arr=monthTx();
+  const t=totals();
+  /*
+    SHEET 1 — Transactions
+  */
+  const transactionRows=[
     [
       'Date',
       'Type',
@@ -1173,44 +1179,188 @@ function exportCSV(){
       'Amount (PHP)'
     ],
     ...arr.map(
-      t=>[
-        t.date,
-        t.type,
-        t.description||'',
-        t.category||t.goalName||'',
-        t.amount
+      tx=>[
+        tx.date,
+        tx.type,
+        tx.description||'',
+        tx.category||tx.goalName||'',
+        tx.amount
       ]
     )
   ];
-  let csv=
-    rows
-      .map(
-        r=>
-          r
-            .map(
-              v=>
-                `"${String(v)
-                  .replaceAll('"','""')}"`
-            )
-            .join(',')
-      )
-      .join('\n');
-  let blob=
-    new Blob(
-      [csv],
-      {
-        type:'text/csv;charset=utf-8'
-      }
+  const wsTransactions=
+    XLSX.utils.aoa_to_sheet(
+      transactionRows
     );
-  let url=
-    URL.createObjectURL(blob);
-  let a=
-    document.createElement('a');
-  a.href=url;
-  a.download=
-    `my-money-${selectedMonth()}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
+  /*
+    SHEET 2 — Summary
+  */
+  const remaining=
+    t.income-
+    t.expense-
+    t.saving;
+  const summaryRows=[
+    ['My Money Tracker'],
+    ['Month',selectedMonth()],
+    [],
+    ['Summary','Amount (PHP)'],
+    ['Income',t.income],
+    ['Expenses',t.expense],
+    ['Savings',t.saving],
+    ['Remaining',remaining],
+    [],
+    ['Transaction Count',arr.length]
+  ];
+  const wsSummary=
+    XLSX.utils.aoa_to_sheet(
+      summaryRows
+    );
+  /*
+    SHEET 3 — Savings Goals
+  */
+  const goalRows=[
+    [
+      'Savings Goal',
+      'Target (PHP)',
+      'Saved (PHP)',
+      'Progress'
+    ]
+  ];
+  db.goals.forEach(g=>{
+    const saved=
+      db.transactions
+        .filter(
+          tx=>
+            tx.type==='saving'
+            &&
+            tx.goalId===g.id
+        )
+        .reduce(
+          (sum,tx)=>
+            sum+tx.amount,
+          0
+        );
+    const progress=
+      g.target
+        ?Math.min(
+          1,
+          saved/g.target
+        )
+        :0;
+    goalRows.push([
+      g.name,
+      g.target,
+      saved,
+      progress
+    ]);
+  });
+  const wsGoals=
+    XLSX.utils.aoa_to_sheet(
+      goalRows
+    );
+  /*
+    COLUMN WIDTHS
+  */
+  wsTransactions['!cols']=[
+    {wch:14},
+    {wch:12},
+    {wch:30},
+    {wch:22},
+    {wch:16}
+  ];
+  wsSummary['!cols']=[
+    {wch:24},
+    {wch:20}
+  ];
+  wsGoals['!cols']=[
+    {wch:25},
+    {wch:18},
+    {wch:18},
+    {wch:14}
+  ];
+  /*
+    FORMAT AMOUNTS AS PESO
+  */
+  for(let r=1;r<transactionRows.length;r++){
+    const cell=
+      wsTransactions[
+        XLSX.utils.encode_cell({
+          r,
+          c:4
+        })
+      ];
+    if(cell){
+      cell.z='"₱"#,##0.00';
+    }
+  }
+  for(let r=4;r<summaryRows.length;r++){
+    const cell=
+      wsSummary[
+        XLSX.utils.encode_cell({
+          r,
+          c:1
+        })
+      ];
+    if(
+      cell
+      &&
+      typeof cell.v==='number'
+    ){
+      cell.z='"₱"#,##0.00';
+    }
+  }
+  for(let r=1;r<goalRows.length;r++){
+    const target=
+      wsGoals[
+        XLSX.utils.encode_cell({
+          r,
+          c:1
+        })
+      ];
+    const saved=
+      wsGoals[
+        XLSX.utils.encode_cell({
+          r,
+          c:2
+        })
+      ];
+    const progress=
+      wsGoals[
+        XLSX.utils.encode_cell({
+          r,
+          c:3
+        })
+      ];
+    if(target) target.z='"₱"#,##0.00';
+    if(saved) saved.z='"₱"#,##0.00';
+    if(progress) progress.z='0%';
+  }
+  /*
+    CREATE WORKBOOK
+  */
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(
+    wb,
+    wsSummary,
+    'Summary'
+  );
+  XLSX.utils.book_append_sheet(
+    wb,
+    wsTransactions,
+    'Transactions'
+  );
+  XLSX.utils.book_append_sheet(
+    wb,
+    wsGoals,
+    'Savings Goals'
+  );
+  /*
+    DOWNLOAD ACTUAL XLSX FILE
+  */
+  XLSX.writeFile(
+    wb,
+    `my-money-${selectedMonth()}.xlsx`
+  );
 }
 /* NAVIGATION */
 document
